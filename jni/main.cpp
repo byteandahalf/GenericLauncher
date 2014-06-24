@@ -12,8 +12,6 @@
 
 #include <main.h>
 
-//hi
-
 /* 
 Put some typedefs and structs here
 */

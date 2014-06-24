@@ -1,0 +1,3 @@
+[submodule "jni/substrate"]
+	path = jni/substrate
+	url = git://git.saurik.com/substrate.git

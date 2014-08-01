@@ -31,16 +31,10 @@ import android.text.Spannable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.KeyCharacterMap;
-import android.view.KeyEvent;
-import android.view.ViewGroup;
+import android.view.*;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.TextView;
+import android.widget.*;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
@@ -49,6 +43,8 @@ import com.byteandahalf.genericlauncher.NativeHandler;
 
 
 public class MainActivity extends NativeActivity {
+
+	public static final int UI_HOVER_BUTTON_TEST = 0;
 
 	PackageInfo packageInfo;
 	ApplicationInfo appInfo;
@@ -101,6 +97,12 @@ public class MainActivity extends NativeActivity {
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
+			
+			getWindow().getDecorView().post(new Runnable() {
+				public void run() {
+					setupTestButton();
+				}
+			});
 
 			nativeRegisterThis();
 			mcpePackage = false;
@@ -620,5 +622,16 @@ public class MainActivity extends NativeActivity {
     		ActivityManager.MemoryInfo localMemoryInfo = new ActivityManager.MemoryInfo();
     		localActivityManager.getMemoryInfo(localMemoryInfo);
     		return localMemoryInfo.availMem;
+  	}
+  	
+  	public void setupTestButton() {
+  		TestButton button = new TestButton();
+  		button.show(getWindow().getDecorView());
+  		button.mainButton.setOnClickListener(new View.OnClickListener() {
+  			public void onClick(View v) {
+  				System.out.println("What does the fox say?");
+  			}
+  		});
+  		
   	}
 }

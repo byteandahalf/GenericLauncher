@@ -39,6 +39,7 @@ import android.widget.*;
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
 
+import com.byteandahalf.genericlauncher.*; // import ALL the things
 import com.byteandahalf.genericlauncher.NativeHandler;
 
 
@@ -625,7 +626,7 @@ public class MainActivity extends NativeActivity {
   	}
   	
   	public void setupTestButton() {
-  		TestButton button = new TestButton();
+  		TestButton button = new TestButton(this);
   		button.show(getWindow().getDecorView());
   		button.mainButton.setOnClickListener(new View.OnClickListener() {
   			public void onClick(View v) {

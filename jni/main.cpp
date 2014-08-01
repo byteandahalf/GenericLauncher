@@ -9,6 +9,8 @@
 #include <string>
 #include <sys/mman.h>
 #include <substrate.h>
+#include <dobby_public.h>
+#include <dl_internal.h>
 
 #include <main.h>
 
@@ -82,6 +84,7 @@ JNIEXPORT void JNICALL Java_com_byteandahalf_genericlauncher_NativeHandler_nativ
 
   	void *handle;
   	handle = dlopen("libminecraftpe.so", RTLD_LAZY);
+  	soinfo2* weakhandle = (soinfo2*) dlopen("libminecraftpe.so", RTLD_LAZY);
 
 
   	void* hk_Minecraft_setLevel = dlsym(handle, "_ZN9Minecraft8setLevelEP5LevelRKSsP11LocalPlayer");

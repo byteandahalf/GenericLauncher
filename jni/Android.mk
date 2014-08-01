@@ -2,7 +2,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)  
 LOCAL_LDLIBS := -llog
 LOCAL_MODULE    := genericlauncher
-LOCAL_SRC_FILES := main.cpp
+LOCAL_SRC_FILES := main.cpp dobby.cpp
 
 LOCAL_SHARED_LIBRARIES := tinysubstrate-bin
 

@@ -12,7 +12,7 @@ public class TestButton extends PopupWindow {
 
 	public TestButton(Activity activity) {
 		super(activity);
-		setContentView(activity.getLayoutInflater().inflate(R.layout.hovercar, null));
+		setContentView(activity.getLayoutInflater().inflate(R.layout.testbutton, null));
 		mainButton = (Button) getContentView().findViewById(R.id.testbutton);
 		setBackgroundDrawable(new ColorDrawable(0x77ffffff));
 		setWidth(100);

@@ -93,8 +93,8 @@ JNIEXPORT void JNICALL Java_com_byteandahalf_genericlauncher_NativeHandler_nativ
   	void* hk_Minecraft_leaveGame = dlsym(handle, "_ZN9Minecraft9leaveGameEbb");
   	MSHookFunction(hk_Minecraft_leaveGame, (void*) &hk_Minecraft_leaveGame_hook, (void**) &hk_Minecraft_leaveGame_real);
 
-    	void* hk_Common_getGameVersionString = dlsym(handle, "_ZN6Common20getGameVersionStringEv");
-    	MSHookFunction(hk_Common_getGameVersionString, (void*) &hk_Common_getGameVersionString_hook, (void**) &hk_Common_getGameVersionString_real);
+//    	void* hk_Common_getGameVersionString = dlsym(handle, "_ZN6Common20getGameVersionStringEv");
+//    	MSHookFunction(hk_Common_getGameVersionString, (void*) &hk_Common_getGameVersionString_hook, (void**) &hk_Common_getGameVersionString_real);
 
 
 

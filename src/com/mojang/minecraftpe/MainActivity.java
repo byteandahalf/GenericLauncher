@@ -13,6 +13,7 @@ import java.util.Locale;
 
 import android.media.AudioManager;
 import android.os.Build;
+import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.app.NativeActivity;
@@ -115,6 +116,18 @@ public class MainActivity extends NativeActivity {
 			finish();
 		}
 
+	}
+
+	public int getAndroidVersion() {
+		return Build.VERSION.SDK_INT;
+	}
+
+	public String getDeviceModel() {
+		String str1 = Build.MANUFACTURER;
+		String str2 = Build.MODEL;
+		if (str2.startsWith(str1))
+		return str2.toUpperCase();
+		return str1.toUpperCase() + " " + str2;
 	}
 
 	private File[] addToFileList(File[] files, File toAdd) {

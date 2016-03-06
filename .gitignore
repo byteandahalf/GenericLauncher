@@ -2,6 +2,10 @@
 *.apk
 *.ap_
 
+# vim swap file
+
+*.swp
+
 # files for the dex VM
 *.dex
 

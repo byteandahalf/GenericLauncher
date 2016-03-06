@@ -36,7 +36,7 @@ public class NativeHandler {
 	public static native void nativeSetupHooks();
 
 	static {
-		System.loadLibrary("gnustl_shared");
+		//System.loadLibrary("gnustl_shared");
 		System.loadLibrary("genericlauncher_tinysubstrate");
 		System.loadLibrary("genericlauncher");
 	}

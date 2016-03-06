@@ -10,14 +10,17 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Vibrator;
 import android.app.NativeActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -25,6 +28,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.Selection;
@@ -39,6 +44,8 @@ import android.widget.*;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
+
+import org.fmod.FMOD;
 
 import com.byteandahalf.genericlauncher.*; // import ALL the things
 import com.byteandahalf.genericlauncher.NativeHandler;
@@ -61,6 +68,7 @@ public class MainActivity extends NativeActivity {
 	public static ByteBuffer minecraftLibBuffer = null;
 	public static MainActivity activity = null;
 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		activity = this;
@@ -82,8 +90,17 @@ public class MainActivity extends NativeActivity {
 				apkContext = createPackageContext("com.mojang.minecraftpe",
 						Context.CONTEXT_IGNORE_SECURITY);
 			}
-
+			Log.d("GenericLauncher","Load library fmod !");
+			System.load(libraryDir+"/libfmod.so");
+			Log.d("GenericLauncher","Load minecraftpe !");
 			System.load(libraryLocation);
+			
+			FMOD.init(this);
+			if(!FMOD.checkInit()) {
+				Log.e("GenericLauncher","Failed to init fmod");
+			} else {
+			//Log.d("GenericLauncher","fmod init sucessful");
+			}
 
 			metrics = new DisplayMetrics();
 			getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -118,9 +135,47 @@ public class MainActivity extends NativeActivity {
 
 	}
 
+	public String getExternalStoragePath() {
+		return Environment.getExternalStorageDirectory().getAbsolutePath();
+	}
+
+	public String getLocale() {
+		return HardwareInformation.getLocale();
+	}
+
 	public int getAndroidVersion() {
 		return Build.VERSION.SDK_INT;
 	}
+
+	boolean hasHardwareChanged() {
+		return false;
+	}
+
+	boolean isTablet() {
+		return (getResources().getConfiguration().screenLayout & 0xF) ==4;
+	}
+
+	public boolean isFirstSnooperStart() {
+		return PreferenceManager.getDefaultSharedPreferences(this).getString("snooperId","").isEmpty();
+	}
+
+	public String createUUID() {
+		return UUID.randomUUID().toString().replaceAll("-","");
+	}
+
+	public String getDeviceId() {
+		SharedPreferences sharedPreferences = 
+			PreferenceManager.getDefaultSharedPreferences(this);
+		String id = sharedPreferences.getString("snooperId", "");
+		if (id.isEmpty()) {
+			id = createUUID();
+			SharedPreferences.Editor edit=sharedPreferences.edit();
+			edit.putString("snooperId",id);
+			edit.commit();
+		}
+		return id;
+	}
+
 
 	public String getDeviceModel() {
 		String str1 = Build.MANUFACTURER;
@@ -222,7 +277,8 @@ public class MainActivity extends NativeActivity {
 		try {
 			InputStream is = getInputStreamForAsset(name);
 			if (is == null) {
-				Log.e("GenericLauncher", "FILE IS NULL!");
+				Log.e("GenericLauncher", 
+					"FILE IS NULL!");
 				return null;
 			}
 			// can't always find length - use the method from
@@ -241,6 +297,7 @@ public class MainActivity extends NativeActivity {
 
 			return retval;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -267,6 +324,7 @@ public class MainActivity extends NativeActivity {
 	}
 
 	protected InputStream getLocalInputStreamForAsset(String name) {
+		//Log.d("GenericLauncher","getStreamAsset "+name);
 		InputStream is = null;
 		try {
 			/*
@@ -290,7 +348,10 @@ public class MainActivity extends NativeActivity {
 		}
 	}
 
-	public int[] getImageData(String name) {
+	public int[] getImageData(String name, boolean wtf) {
+		if (!wtf) {
+			Log.w("GenericLauncher","I must return null?");
+		}
 		System.out.println("Get image data: " + name);
 		try {
 			InputStream is = getInputStreamForAsset(name);
@@ -321,6 +382,15 @@ public class MainActivity extends NativeActivity {
 		return new String[] {};
 	}
 
+	public void launchUri(String uri) {
+		startActivity(new Intent("android.intent.action.View",
+			Uri.parse(uri)));
+	}
+
+	void pickImage(long paramLong) {
+		Log.e("GenericLauncher","pickImage");
+	}
+
 	public float getPixelsPerMillimeter() {
 		float val = ((float) metrics.densityDpi) / 25.4f;
 		System.out.println("Pixels per mm: " + val);
@@ -331,6 +401,11 @@ public class MainActivity extends NativeActivity {
 	public String getPlatformStringVar(int a) {
 		System.out.println("getPlatformStringVar: " + a);
 		return "";
+	}
+
+	public float getKeyboardHeight() {
+		Log.w("GenericLauncher","Bad implemented getKeyboardHeight");
+		return (float) getScreenHeight()/2;
 	}
 
 	public int getScreenHeight() {
@@ -415,10 +490,10 @@ public class MainActivity extends NativeActivity {
 	}
 
 	public void showKeyboard(final String mystr, final int maxLength,
-			final boolean mybool) {
+			final boolean mybool,final boolean isNumber) {
 		this.runOnUiThread(new Runnable() {
 			public void run() {
-				showHiddenTextbox(mystr, maxLength, mybool);
+				showHiddenTextbox(mystr, maxLength, mybool,isNumber);
 			}
 		});
 	}
@@ -471,7 +546,7 @@ public class MainActivity extends NativeActivity {
 	}
 
 	public void showHiddenTextbox(String text, int maxLength,
-			boolean dismissAfterOneLine) {
+			boolean dismissAfterOneLine,boolean isNumber) {
 		int IME_FLAG_NO_FULLSCREEN = 0x02000000;
 		if (hiddenTextWindow == null) {
 			hiddenTextView = new EditText(this);
@@ -507,6 +582,9 @@ public class MainActivity extends NativeActivity {
 					});
 		}
 
+		if (isNumber) {
+		    hiddenTextView.setInputType(InputType.TYPE_CLASS_NUMBER);
+		}
 		hiddenTextView.setText(text);
 		Selection.setSelection((Spannable) hiddenTextView.getText(),
 				text.length());

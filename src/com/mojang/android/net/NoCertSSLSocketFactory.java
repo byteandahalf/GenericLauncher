@@ -14,14 +14,15 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.apache.http.conn.ssl.SSLSocketFactory;
+
 public class NoCertSSLSocketFactory
-  extends org.apache.http.conn.ssl.SSLSocketFactory
-{
+  extends SSLSocketFactory {
+
   private SSLContext sslContext = SSLContext.getInstance("TLS");
   
   public NoCertSSLSocketFactory(KeyStore paramKeyStore)
-    throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException, UnrecoverableKeyException
-  {
+    throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException, UnrecoverableKeyException {
     super(paramKeyStore);
     X509TrustManager trustManager = new X509TrustManager()
     {
@@ -42,30 +43,22 @@ public class NoCertSSLSocketFactory
   }
   
   public static NoCertSSLSocketFactory createDefault()
-    throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, KeyManagementException, UnrecoverableKeyException
-  {
-    Object localObject = KeyStore.getInstance(KeyStore.getDefaultType());
-    ((KeyStore)localObject).load(null, null);
-    localObject = new NoCertSSLSocketFactory((KeyStore)localObject);
-    ((NoCertSSLSocketFactory)localObject).setHostnameVerifier(org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-    return (NoCertSSLSocketFactory)localObject;
+    throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, KeyManagementException, UnrecoverableKeyException {
+    KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
+    keystore.load(null, null);
+    NoCertSSLSocketFactory factory  = new NoCertSSLSocketFactory(keystore);
+    factory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+    return factory;
   }
   
   public Socket createSocket()
-    throws IOException
-  {
+    throws IOException {
     return this.sslContext.getSocketFactory().createSocket();
   }
   
   public Socket createSocket(Socket paramSocket, String paramString, int paramInt, boolean paramBoolean)
-    throws IOException, UnknownHostException
-  {
+    throws IOException, UnknownHostException {
     return this.sslContext.getSocketFactory().createSocket(paramSocket, paramString, paramInt, paramBoolean);
   }
 }
 
-
-/* Location:              /home/aurelien/C/mcpemod/decompile/classes-dex2jar.jar!/com/mojang/android/net/NoCertSSLSocketFactory.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

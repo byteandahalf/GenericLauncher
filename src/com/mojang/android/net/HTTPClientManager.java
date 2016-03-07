@@ -19,38 +19,29 @@ public class HTTPClientManager
   HttpClient mHTTPClient = null;
   String mHttpClient;
   
-  private HTTPClientManager()
-  {
-    BasicHttpParams localBasicHttpParams = new BasicHttpParams();
-    HttpProtocolParams.setVersion(localBasicHttpParams, HttpVersion.HTTP_1_1);
-    HttpProtocolParams.setContentCharset(localBasicHttpParams, "utf-8");
-    ConnManagerParams.setTimeout(localBasicHttpParams, 30000L);
-    localBasicHttpParams.setBooleanParameter("http.protocol.expect-continue", false);
+  private HTTPClientManager() {
+    BasicHttpParams params = new BasicHttpParams();
+    HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+    HttpProtocolParams.setContentCharset(params, "utf-8");
+    ConnManagerParams.setTimeout(params, 30000L);
+    params.setBooleanParameter("http.protocol.expect-continue", false);
     SchemeRegistry localSchemeRegistry = new SchemeRegistry();
     localSchemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
     try
     {
       localSchemeRegistry.register(new Scheme("https", NoCertSSLSocketFactory.createDefault(), 443));
-      this.mHTTPClient = new DefaultHttpClient(new ThreadSafeClientConnManager(localBasicHttpParams, localSchemeRegistry), localBasicHttpParams);
+      this.mHTTPClient = new DefaultHttpClient(new ThreadSafeClientConnManager(params, localSchemeRegistry), params);
       return;
     }
-    catch (Exception localException)
+    catch (Exception exception)
     {
-      for (;;)
-      {
-        Log.e("MCPE_ssl", "Couldn't create SSLSocketFactory");
-      }
+      exception.printStackTrace();
+      Log.e("MCPE_ssl", "Couldn't create SSLSocketFactory");
     }
   }
   
-  public static HttpClient getHTTPClient()
-  {
+  public static HttpClient getHTTPClient() {
     return instance.mHTTPClient;
   }
 }
 
-
-/* Location:              /home/aurelien/C/mcpemod/decompile/classes-dex2jar.jar!/com/mojang/android/net/HTTPClientManager.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

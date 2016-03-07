@@ -60,45 +60,32 @@ public class HTTPRequest
     this.mHTTPRequest.addHeader("Charset", "utf-8");
   }
   
-  /*private void createHTTPRequest(String paramString)
-  {
-    for (;;)
-    {
-      try
-      {
-        if (paramString.equals("DELETE"))
+  private void createHTTPRequest(String request) {
+        if (request.equals("DELETE"))
         {
           this.mHTTPRequest = new HttpDelete(this.mURL);
           return;
         }
-        if (paramString.equals("PUT"))
+        if (request.equals("PUT"))
         {
-          paramString = new HttpPut(this.mURL);
-          addBodyToRequest(paramString);
-          this.mHTTPRequest = paramString;
-          continue;
+          HttpPut put = new HttpPut(this.mURL);
+          addBodyToRequest(put);
+          this.mHTTPRequest = put;
+          return;
         }
-        if (!paramString.equals("GET")) {
-          break label95;
+        if (request.equals("GET")) {
+          this.mHTTPRequest = new HttpGet(this.mURL);
+          return;
         }
-      }
-      finally {}
-      this.mHTTPRequest = new HttpGet(this.mURL);
-      continue;
-      label95:
-      if (!paramString.equals("POST")) {
-        break;
-      }
-      paramString = new HttpPost(this.mURL);
-      addBodyToRequest(paramString);
-      this.mHTTPRequest = paramString;
-    }
-    throw new InvalidParameterException("Unknown request method " + paramString);
-  }*/
-
-  private void createHTTPRequest(String paramString) {
-	Log.e("GenericLauncher","HTTPRequest.createHTTPRequest");	
- }
+        if (request.equals("POST")) {
+          HttpPost post = new HttpPost(this.mURL);
+          addBodyToRequest(post);
+          this.mHTTPRequest = post;
+          return;
+        }
+      
+    throw new InvalidParameterException("Unknown request method " + request);
+  }
   
   public void abort()
   {
@@ -118,8 +105,7 @@ public class HTTPRequest
     }
   }
   
-  /*public HTTPResponse send(String paramString)
-  {
+  public HTTPResponse send(String paramString) {
     createHTTPRequest(paramString);
     addHeaders();
     if (this.mResponse.getStatus() == 2) {
@@ -127,65 +113,45 @@ public class HTTPRequest
     }
     try
     {
-      paramString = HTTPClientManager.getHTTPClient().execute(this.mHTTPRequest);
-      this.mResponse.setResponseCode(paramString.getStatusLine().getStatusCode());
-      HttpEntity localHttpEntity = paramString.getEntity();
+      HttpResponse response = HTTPClientManager.getHTTPClient().execute(this.mHTTPRequest);
+      mResponse.setResponseCode(response.getStatusLine().getStatusCode());
+      HttpEntity localHttpEntity = response.getEntity();
       this.mResponse.setBody(EntityUtils.toString(localHttpEntity));
       this.mResponse.setStatus(1);
-      this.mResponse.setHeaders(paramString.getAllHeaders());
-      paramString = this.mResponse;
-      return paramString;
+      this.mResponse.setHeaders(response.getAllHeaders());
+      return this.mResponse;
     }
-    catch (ConnectTimeoutException paramString)
+    catch (ConnectTimeoutException connectTimeoutException)
     {
       this.mResponse.setStatus(3);
       this.mHTTPRequest = null;
       return this.mResponse;
     }
-    catch (ClientProtocolException paramString)
+    catch (ClientProtocolException clientProtocolException)
     {
-      for (;;)
-      {
-        paramString.printStackTrace();
-      }
+      clientProtocolException.printStackTrace();
     }
-    catch (IOException paramString)
+    catch (IOException ioException)
     {
-      for (;;)
-      {
-        paramString.printStackTrace();
-      }
+      ioException.printStackTrace();
     }
-  }*/
-
-  public HTTPResponse send(String paramString) {
-    Log.e("GenericLauncher","HTTPRequest.send");
     return null;
   }
   
-  public void setContentType(String paramString)
-  {
-    this.mRequestContentType = paramString;
+  public void setContentType(String contentType) {
+    this.mRequestContentType = contentType;
   }
   
-  public void setCookieData(String paramString)
-  {
-    this.mCookieData = paramString;
+  public void setCookieData(String cookieData) {
+    this.mCookieData = cookieData;
   }
   
-  public void setRequestBody(String paramString)
-  {
-    this.mRequestBody = paramString;
+  public void setRequestBody(String requestBody) {
+    this.mRequestBody = requestBody;
   }
   
-  public void setURL(String paramString)
-  {
-    this.mURL = paramString;
+  public void setURL(String url) {
+    this.mURL = url;
   }
 }
 
-
-/* Location:              /home/aurelien/C/mcpemod/decompile/classes-dex2jar.jar!/com/mojang/android/net/HTTPRequest.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

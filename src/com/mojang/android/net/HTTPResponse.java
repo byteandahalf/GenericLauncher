@@ -13,49 +13,36 @@ public class HTTPResponse
   int responseCode = -100;
   int status = 0;
   
-  public String getBody()
-  {
+  public String getBody() {
     return this.body;
   }
   
-  public Header[] getHeaders()
-  {
+  public Header[] getHeaders() {
     return this.headers;
   }
   
-  public int getResponseCode()
-  {
+  public int getResponseCode() {
     return this.responseCode;
   }
   
-  public int getStatus()
-  {
+  public int getStatus() {
     return this.status;
   }
   
-  public void setBody(String paramString)
-  {
-    this.body = paramString;
+  public void setBody(String body) {
+    this.body = body;
   }
   
-  public void setHeaders(Header[] paramArrayOfHeader)
-  {
-    this.headers = paramArrayOfHeader;
+  public void setHeaders(Header[] headers) {
+    this.headers = headers;
   }
   
-  public void setResponseCode(int paramInt)
-  {
-    this.responseCode = paramInt;
+  public void setResponseCode(int code) {
+    this.responseCode = code;
   }
   
-  public void setStatus(int paramInt)
-  {
-    this.status = paramInt;
+  public void setStatus(int status) {
+    this.status = status;
   }
 }
 
-
-/* Location:              /home/aurelien/C/mcpemod/decompile/classes-dex2jar.jar!/com/mojang/android/net/HTTPResponse.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

@@ -262,6 +262,8 @@ public class MainActivity extends NativeActivity {
 		return 0;
 	}
 
+	public void onBackPressed() {}
+
 	public void displayDialog(int dialogId) {
 		Log.d("GenericLauncher", "[displayDialog] Dialog ID:" + dialogId);
 	}

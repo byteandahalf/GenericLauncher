@@ -1,20 +1,40 @@
 package com.mojang.minecraftpe.store;
 
-public abstract interface Store
+import android.util.Log;
+
+public class Store
 {
-  public abstract void destructor();
+  private StoreListener listener;
   
-  public abstract String getStoreId();
+  public Store(StoreListener paramStoreListener)
+  {
+    this.listener = paramStoreListener;
+  }
   
-  public abstract void purchase(String paramString);
+  public void destructor()
+  {
+    Log.i("GenericLauncher","Store: Destructor");
+  }
   
-  public abstract void queryProducts(String[] paramArrayOfString);
+  public String getStoreId()
+  {
+    Log.i("GenericLauncher","Store: Get store ID");
+    return "Placeholder store ID";
+  }
   
-  public abstract void queryPurchases();
+  public void purchase(String paramString)
+  {
+    Log.i("GenericLauncher","Store: Purchase " + paramString);
+  }
+  
+  public void queryProducts(String[] paramArrayOfString)
+  {
+    Log.i("GenericLauncher","Store: Query products");
+  }
+  
+  public void queryPurchases()
+  {
+    Log.i("GenericLauncher","Store: Query purchases");
+  }
 }
 
-
-/* Location:              /home/aurelien/C/mcpemod/decompile/classes-dex2jar.jar!/com/mojang/minecraftpe/store/Store.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

@@ -67,8 +67,3 @@ public class NativeStoreListener
   }
 }
 
-
-/* Location:              /home/aurelien/C/mcpemod/decompile/classes-dex2jar.jar!/com/mojang/minecraftpe/store/NativeStoreListener.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

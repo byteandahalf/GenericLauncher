@@ -12,8 +12,3 @@ public class Product
   }
 }
 
-
-/* Location:              /home/aurelien/C/mcpemod/decompile/classes-dex2jar.jar!/com/mojang/minecraftpe/store/Product.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

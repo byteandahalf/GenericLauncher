@@ -6,6 +6,8 @@ import android.graphics.drawable.*;
 import android.view.*;
 import android.widget.*;
 
+import com.derderder.genericlauncher.R;
+
 public class TestButton extends PopupWindow {
 
 	public Button mainButton;

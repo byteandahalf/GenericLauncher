@@ -3,7 +3,6 @@ package com.mojang.minecraftpe;
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Build.VERSION;
-//import com.mojang.minecraftpe.platforms.Platform;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -96,7 +95,6 @@ public class HardwareInformation
   
   public static String getCPUType()
   {
-    //return Platform.createPlatform(false).getABIS();
     int currentapiVersion = android.os.Build.VERSION.SDK_INT;
     if (currentapiVersion < 21){
         return Build.CPU_ABI;
@@ -152,8 +150,3 @@ public class HardwareInformation
   }
 }
 
-
-/* Location:              /home/aurelien/C/mcpemod/decompile/classes-dex2jar.jar!/com/mojang/minecraftpe/HardwareInformation.class
- * Java compiler version: 6 (50.0)
- * JD-Core Version:       0.7.1
- */

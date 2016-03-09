@@ -2,6 +2,7 @@ package com.mojang.minecraftpe;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -277,7 +278,13 @@ public class MainActivity extends NativeActivity {
 	public byte[] getFileDataBytes(String name) {
 		System.out.println("Get file data: " + name);
 		try {
-			InputStream is = getInputStreamForAsset(name);
+			if (name.isEmpty())
+				return null;
+			InputStream is = null;
+			if (name.charAt(0) == '/')
+				is = new FileInputStream(new File(name));
+			else 
+				is = getInputStreamForAsset(name);
 			if (is == null) {
 				Log.e("GenericLauncher", 
 					"FILE IS NULL!");
@@ -333,7 +340,10 @@ public class MainActivity extends NativeActivity {
 			 * if (forceFallback) { return getAssets().open(name); }
 			 */
 			try {
-				is = apkContext.getAssets().open(name);
+				if (name.charAt(0) == '/')
+					is =new FileInputStream(new File(name));
+				else 
+					is = apkContext.getAssets().open(name);
 			} catch (Exception e) {
 				e.printStackTrace();
 				// System.out.println("Attempting to load fallback");

@@ -598,6 +598,13 @@ public class MainActivity extends NativeActivity {
 		showKeyboardView();
 	}
 
+	protected void onDestroy() {
+		FMOD.close();
+		nativeUnregisterThis();
+		super.onDestroy();
+		System.exit(0);
+	}
+
 	public void dismissHiddenTextbox() {
 		if (hiddenTextWindow == null)
 			return;

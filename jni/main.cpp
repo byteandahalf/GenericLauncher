@@ -30,6 +30,7 @@ jclass nativehandler_class;
 
 static std::string (*hk_Common_getGameVersionString_real)();
 static void (*hk_MinecraftClient_init_real)(MinecraftClient*);
+static bool (*hk_Minecraft_isModded_real)(Minecraft*);
 
 void MSHookFunction(void* symbol, void* hook, void** real);
 
@@ -52,6 +53,10 @@ void hk_MinecraftClient_init_hook(MinecraftClient* client) {
 	__android_log_print(ANDROID_LOG_INFO, "GenericLauncher", "MinecraftClient::init");
 	mcclient_inst = client;
 	hk_MinecraftClient_init_real(client);	
+}
+
+bool hk_Minecraft_isModded_hook(Minecraft* mc) {
+	return true;
 }
 
 JNIEXPORT jint JNICALL Java_net_zhuoweizhang_pokerface_PokerFace_mprotect(JNIEnv* env, jclass clazz, jlong addr, jlong len, jint prot) {
@@ -77,6 +82,9 @@ JNIEXPORT void JNICALL Java_com_byteandahalf_genericlauncher_NativeHandler_nativ
 
 	void* hk_MinecraftClient_init = dlsym(handle, "_ZN15MinecraftClient4initEv");
 	MSHookFunction(hk_MinecraftClient_init, (void*) &hk_MinecraftClient_init_hook, (void**) &hk_MinecraftClient_init_real);
+	
+	void* hk_Minecraft_isModded = dlsym(handle, "_ZN9Minecraft8isModdedEv");
+	MSHookFunction(hk_Minecraft_isModded, (void*) &hk_Minecraft_isModded_hook, (void**) &hk_Minecraft_isModded_real);
 
   	dlerror();
 
